@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.106
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlfaWpfControls", "AlfaWpfControls\AlfaWpfControls.csproj", "{43154D79-8397-4030-A1DA-07BD0CA3952E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApp", "TestApp\TestApp.csproj", "{4EBF7F9B-42D5-403F-A50C-5806DC5FC9B4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{43154D79-8397-4030-A1DA-07BD0CA3952E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43154D79-8397-4030-A1DA-07BD0CA3952E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{43154D79-8397-4030-A1DA-07BD0CA3952E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EBF7F9B-42D5-403F-A50C-5806DC5FC9B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EBF7F9B-42D5-403F-A50C-5806DC5FC9B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EBF7F9B-42D5-403F-A50C-5806DC5FC9B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EBF7F9B-42D5-403F-A50C-5806DC5FC9B4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
