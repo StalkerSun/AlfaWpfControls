@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
@@ -27,19 +26,19 @@ namespace AlfaWpfControls.ATimerIndicator
 
         #region Dep Property local
 
-          private static readonly DependencyPropertyKey ArrayStateSegmentsPropertyKey
-        = DependencyProperty.RegisterReadOnly("ArrayStateSegments", typeof(ActiveSegment[]), typeof(ATimerIndicator),
-            new FrameworkPropertyMetadata(new ActiveSegment[] {new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment() },
-                FrameworkPropertyMetadataOptions.None));
+        private static readonly DependencyPropertyKey ArrayStateSegmentsPropertyKey
+      = DependencyProperty.RegisterReadOnly("ArrayStateSegments", typeof(ActiveSegment[]), typeof(ATimerIndicator),
+          new FrameworkPropertyMetadata(new ActiveSegment[] { new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment() },
+              FrameworkPropertyMetadataOptions.None));
 
-          public static readonly DependencyProperty ArrayStateSegmentsProperty
-              = ArrayStateSegmentsPropertyKey.DependencyProperty;
+        public static readonly DependencyProperty ArrayStateSegmentsProperty
+            = ArrayStateSegmentsPropertyKey.DependencyProperty;
 
-          public ActiveSegment[] ArrayStateSegments
-          {
-              get { return ( ActiveSegment[] ) GetValue(ArrayStateSegmentsProperty); }
-              protected set { SetValue(ArrayStateSegmentsPropertyKey, value); }
-          }
+        public ActiveSegment[] ArrayStateSegments
+        {
+            get { return ( ActiveSegment[] ) GetValue(ArrayStateSegmentsProperty); }
+            protected set { SetValue(ArrayStateSegmentsPropertyKey, value); }
+        }
 
 
 
@@ -198,8 +197,9 @@ namespace AlfaWpfControls.ATimerIndicator
 
             control.CurrentTimerValue = ( TimeSpan ) e.NewValue;
         }
+        #endregion
 
-
+        #region PercentValue
 
         public double PercentValue
         {
@@ -217,9 +217,8 @@ namespace AlfaWpfControls.ATimerIndicator
             return ( ( val >= 0 ) && ( val <= 100 ) );
         }
 
-
-
         #endregion
+
 
         #endregion
 
@@ -231,7 +230,7 @@ namespace AlfaWpfControls.ATimerIndicator
 
         public override void OnApplyTemplate()
         {
-            
+
 
             ActiveBrush = new SolidColorBrush(IndicatorActiveColor);
 
@@ -241,7 +240,7 @@ namespace AlfaWpfControls.ATimerIndicator
 
 
 
-            
+
 
 
             _timer = new DispatcherTimer

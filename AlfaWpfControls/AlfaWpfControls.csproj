@@ -60,6 +60,7 @@
     <Compile Include="ATimerIndicator\ATimerIndicator.cs" />
     <Compile Include="Convertors\FormatConvertor.cs" />
     <Compile Include="Helpers\BindingProxy.cs" />
+    <Compile Include="Helpers\RelayCommands.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
