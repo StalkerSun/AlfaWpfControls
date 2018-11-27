@@ -1,10 +1,12 @@
-﻿using System;
+﻿using AlfaWpfControls.AContolTemplateUpdateEvent;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
+using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace AlfaWpfControls.ATimerIndicator
@@ -19,6 +21,15 @@ namespace AlfaWpfControls.ATimerIndicator
         private int _currentIndex = 0;
 
         private bool _isDisp = false;
+
+        private PathFigure _pathFigure;
+
+        private ArcSegment _arcSegment;
+
+        private Path _pathRoot;
+
+        private AControlTemplateUpdateEvent _control;
+
 
 
         #endregion
@@ -193,8 +204,10 @@ namespace AlfaWpfControls.ATimerIndicator
         {
             var control = ( ATimerIndicator ) d;
 
-            if(control._timer!=null)
+            if (control._timer != null)
+            {
                 control._timer.Stop();
+            }
 
             control.CurrentTimerValue = ( TimeSpan ) e.NewValue;
         }
@@ -231,18 +244,9 @@ namespace AlfaWpfControls.ATimerIndicator
 
         public override void OnApplyTemplate()
         {
-
-
             ActiveBrush = new SolidColorBrush(IndicatorActiveColor);
 
             InactiveBrush = new SolidColorBrush(IndicatorInactiveColor);
-
-            base.OnApplyTemplate();
-
-
-
-
-
 
             _timer = new DispatcherTimer
             {
@@ -251,25 +255,31 @@ namespace AlfaWpfControls.ATimerIndicator
 
             _timer.Tick += _timer_Tick;
 
-            //Duration = new TimeSpan(0, 1, 0);
+            base.OnApplyTemplate();
 
-            //_timer.Start();
+            _control = ( AControlTemplateUpdateEvent ) ( Template.FindName("ViewIndicatorControl", this) );
+
+            _control.UpdateTemplate += _control_UpdateTemplate;
         }
+
+        private void _control_UpdateTemplate(object sender, RoutedEventArgs e)
+        {
+            var template = _control.Template;
+
+            if (template == ( ControlTemplate ) this.FindResource("ATimerIndicator_FullLineIndicatorTemplate"))
+            {
+                _pathRoot = template.FindName("IndicatorPath", _control) as Path;
+
+                _pathFigure = template.FindName("pathFigure", _control) as PathFigure;
+
+                _arcSegment = template.FindName("arcSegment", _control) as ArcSegment;
+            }
+        }
+
+        #region private methods
 
         private void _timer_Tick(object sender, EventArgs e)
         {
-            //bool[] tmp = new bool[18];
-            //ArrayStateSegments.CopyTo(tmp, 0);
-
-            //tmp[_currentIndex] = false;
-
-            //if (_currentIndex == tmp.Length - 1)
-            //    _currentIndex = -1;
-
-            //_currentIndex++;
-
-            //tmp[_currentIndex] = true;
-
             var tmpVal = CurrentTimerValue - new TimeSpan(0, 0, 1);
 
             if (tmpVal >= new TimeSpan(0, 0, 0))
@@ -286,26 +296,6 @@ namespace AlfaWpfControls.ATimerIndicator
                 Stop();
             }
         }
-
-        //private bool[] GetNewArray(TimeSpan currentValue, TimeSpan duration, int countElem)
-        //{
-        //    if (countElem == 0) throw new ArgumentException("Число эллементов не может быть равно 0");
-
-        //    bool[] resArray = new bool[countElem];
-
-        //    var valueOneElem = 100.0 / countElem;
-
-        //    var percent = ((int)currentValue.TotalSeconds * 100.0) / (int)duration.TotalSeconds;
-
-        //    var countFullElem = Math.Ceiling(percent / valueOneElem);
-
-        //    for (int i = 0; i < countFullElem; i++)
-        //    {
-        //        resArray[i] = true;
-        //    }
-
-        //    return resArray;
-        //}
 
         private ActiveSegment[] GetNewArray(TimeSpan currentValue, TimeSpan duration, int countElem)
         {
@@ -341,6 +331,9 @@ namespace AlfaWpfControls.ATimerIndicator
 
             return resArray;
         }
+
+        #endregion
+
 
         #region public methods
 

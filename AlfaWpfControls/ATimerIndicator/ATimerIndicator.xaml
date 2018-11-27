@@ -2,7 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:AlfaWpfControls.ATimerIndicator"
                     xmlns:conv="clr-namespace:AlfaWpfControls.Convertors"
-                    xmlns:helpers="clr-namespace:AlfaWpfControls.Helpers">
+                    xmlns:helpers="clr-namespace:AlfaWpfControls.Helpers"
+                    xmlns:ACntrlT ="clr-namespace:AlfaWpfControls.AContolTemplateUpdateEvent">
     
 
     <Style TargetType="{x:Type local:ATimerIndicator}">
@@ -90,7 +91,7 @@
                             </Viewbox>
                         </ControlTemplate>
 
-                        <ControlTemplate x:Key="ATimerIndicator_DottedLineIndicaorTemplate" TargetType="{x:Type Control}">
+                        <ControlTemplate x:Key="ATimerIndicator_DottedLineIndicatorTemplate" TargetType="{x:Type Control}">
                             <ControlTemplate.Resources>
                                 <local:BoolToBrushMultiValueConverter x:Key="BoolToBrushMultiValueConverter"/>
                             </ControlTemplate.Resources>
@@ -427,6 +428,46 @@
                             
                         </ControlTemplate>
 
+                        <ControlTemplate x:Key="ATimerIndicator_FullLineIndicatorTemplate" TargetType="{x:Type Control}">
+                            <Viewbox>
+                                <Grid Height="369.334" Width="368">
+                                    <Path x:Name="BackendPath" 
+                                          Data="M158.5,20.999998 C83.113128,21 21.999999,82.411758 21.999999,158.16701 21.999999,233.92224 83.113128,295.33401 158.5,295.33401 233.88687,295.33401 295,233.92224 295,158.16701 295,82.411758 233.88687,21 158.5,20.999998 z M158,0 C245.26099,0 316,71.037636 316,158.66701 316,246.29637 245.26099,317.33401 158,317.33401 70.739005,317.33401 -1.0749504E-06,246.29637 0,158.66701 -1.0749504E-06,71.037636 70.739005,0 158,0 z" 
+                                          HorizontalAlignment="Stretch" 
+                                          Margin="26,27,26,25" 
+                                          Stretch="Fill" 
+                                          VerticalAlignment="Stretch"
+                                          Stroke="{Binding Path=InactiveBrush, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:ATimerIndicator}}}" 
+                                          Fill="{Binding Path=InactiveBrush, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:ATimerIndicator}}}" 
+                                          />
+                                    <Path x:Name="IndicatorPath"
+                                          HorizontalAlignment="Stretch"
+                                          VerticalAlignment="Stretch"
+                                          Margin="26,27,26,25" 
+                                          Stroke="{Binding Path=ActiveBrush, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:ATimerIndicator}}}"
+                                          StrokeThickness="26">
+                                        <Path.Data>
+                                            <PathGeometry>
+                                                <PathGeometry.Figures>
+                                                    <PathFigureCollection>
+                                                        <PathFigure x:Name="pathFigure">
+                                                            <PathFigure.Segments>
+                                                                <PathSegmentCollection>
+                                                                    <ArcSegment x:Name="arcSegment" SweepDirection="Clockwise" />
+                                                                </PathSegmentCollection>
+                                                            </PathFigure.Segments>
+                                                        </PathFigure>
+                                                    </PathFigureCollection>
+                                                </PathGeometry.Figures>
+                                            </PathGeometry>
+                                        </Path.Data>
+                                    </Path>
+
+
+                                </Grid>
+                            </Viewbox> 
+                        </ControlTemplate>
+
                     </ControlTemplate.Resources>
                     
                     <Viewbox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
@@ -450,9 +491,12 @@
                                 </Ellipse.Fill>
                             </Ellipse>
                             <Ellipse Stretch="Fill" StrokeLineJoin="Round" Stroke="#FF000000" Fill="#FF34516E" Margin="56,57,0,0" Height="257" VerticalAlignment="Top" HorizontalAlignment="Left" Width="257"/>
-                            <Control HorizontalAlignment="Stretch" 
-                                     VerticalAlignment="Stretch" 
-                                     Template="{StaticResource ATimerIndicator_DottedLineIndicaorTemplate}"/>
+                            
+                            <ACntrlT:AControlTemplateUpdateEvent x:Name="ViewIndicatorControl" 
+                                                                 HorizontalAlignment="Stretch" 
+                                                                 VerticalAlignment="Stretch" 
+                                                                 Template="{StaticResource ATimerIndicator_FullLineIndicatorTemplate}"/>
+                            
 
                             <Control x:Name="ViewInfoControl"
                          HorizontalAlignment="Center"

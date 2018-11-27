@@ -57,6 +57,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AContolTemplateUpdateEvent\AControlTemplateUpdateEvent.cs" />
     <Compile Include="ATimerIndicator\ATimerIndicator.cs" />
     <Compile Include="Convertors\FormatConvertor.cs" />
     <Compile Include="Helpers\BindingProxy.cs" />
