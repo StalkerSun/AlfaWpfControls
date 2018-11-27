@@ -20,7 +20,13 @@
                     <RowDefinition Height="0.8*"/>
                     <RowDefinition Height="0.2*"/>
                 </Grid.RowDefinitions>
-                <AWpfControls:ATimerIndicator x:Name="ATimerIndicatorControl" Height="200" Width="200" IndicatorActiveColor="#FF0A0A74" >
+                <AWpfControls:ATimerIndicator x:Name="ATimerIndicatorControl" 
+                                              Height="200" 
+                                              Width="200" 
+                                              IndicatorActiveColor="#FF0A0A74" 
+                                              Duration="{Binding Duration111, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
+                                              Foreground="Black"
+                                              >
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="OnStart" SourceObject="{Binding Mode=OneWay}">
                             <ei:CallMethodAction MethodName="RunTimer" TargetObject="{Binding ElementName=ATimerIndicatorControl}"/>

@@ -193,7 +193,8 @@ namespace AlfaWpfControls.ATimerIndicator
         {
             var control = ( ATimerIndicator ) d;
 
-            control._timer.Stop();
+            if(control._timer!=null)
+                control._timer.Stop();
 
             control.CurrentTimerValue = ( TimeSpan ) e.NewValue;
         }
@@ -250,9 +251,9 @@ namespace AlfaWpfControls.ATimerIndicator
 
             _timer.Tick += _timer_Tick;
 
-            Duration = new TimeSpan(0, 1, 0);
+            //Duration = new TimeSpan(0, 1, 0);
 
-            _timer.Start();
+            //_timer.Start();
         }
 
         private void _timer_Tick(object sender, EventArgs e)
