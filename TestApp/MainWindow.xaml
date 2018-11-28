@@ -21,10 +21,10 @@
                     <RowDefinition Height="0.2*"/>
                 </Grid.RowDefinitions>
                 <AWpfControls:ATimerIndicator x:Name="ATimerIndicatorControl" 
-                                              
                                               IndicatorActiveColor="#FF0A0A74" 
                                               Duration="{Binding Duration111, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
                                               Foreground="Black"
+                                              TypeViewIndicator="Full"
                                               >
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="OnStart" SourceObject="{Binding Mode=OneWay}">
@@ -36,7 +36,6 @@
                         <i:EventTrigger EventName="OnRestart" SourceObject="{Binding Mode=OneWay}">
                             <ei:CallMethodAction MethodName="Reset" TargetObject="{Binding ElementName=ATimerIndicatorControl}"/>
                         </i:EventTrigger>
-                        
                     </i:Interaction.Triggers>
                 </AWpfControls:ATimerIndicator>
                 <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">

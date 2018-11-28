@@ -491,11 +491,24 @@
                                 </Ellipse.Fill>
                             </Ellipse>
                             <Ellipse Stretch="Fill" StrokeLineJoin="Round" Stroke="#FF000000" Fill="#FF34516E" Margin="56,57,0,0" Height="257" VerticalAlignment="Top" HorizontalAlignment="Left" Width="257"/>
-                            
+
                             <ACntrlT:AControlTemplateUpdateEvent x:Name="ViewIndicatorControl" 
                                                                  HorizontalAlignment="Stretch" 
                                                                  VerticalAlignment="Stretch" 
-                                                                 Template="{StaticResource ATimerIndicator_FullLineIndicatorTemplate}"/>
+                                                                 >
+                                <ACntrlT:AControlTemplateUpdateEvent.Style>
+                                    <Style TargetType="{x:Type ACntrlT:AControlTemplateUpdateEvent}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TypeViewIndicator}" Value="Full">
+                                                <Setter Property="Template" Value="{StaticResource ATimerIndicator_FullLineIndicatorTemplate}"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TypeViewIndicator}" Value="Dotted">
+                                                <Setter Property="Template" Value="{StaticResource ATimerIndicator_DottedLineIndicatorTemplate}"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ACntrlT:AControlTemplateUpdateEvent.Style>
+                            </ACntrlT:AControlTemplateUpdateEvent>
                             
 
                             <Control x:Name="ViewInfoControl"

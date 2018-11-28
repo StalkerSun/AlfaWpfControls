@@ -168,7 +168,7 @@ namespace AlfaWpfControls.ATimerIndicator
 
         #endregion
 
-        #region TypeViewIndicator
+        #region TypeViewDataIndicator
 
         public TypeViewDataIndicator TypeViewDataIndicator
         {
@@ -181,6 +181,24 @@ namespace AlfaWpfControls.ATimerIndicator
 
         #endregion
 
+
+        #region TypeViewIndicator
+
+
+
+        public EnumTypeViewIndicator TypeViewIndicator
+        {
+            get { return ( EnumTypeViewIndicator ) GetValue(TypeViewIndicatorProperty); }
+            set { SetValue(TypeViewIndicatorProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for TypeViewIndicator.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty TypeViewIndicatorProperty =
+            DependencyProperty.Register("TypeViewIndicator", typeof(EnumTypeViewIndicator), typeof(ATimerIndicator), new PropertyMetadata(EnumTypeViewIndicator.Dotted));
+
+
+
+        #endregion
 
         #region Times
 
@@ -382,6 +400,7 @@ namespace AlfaWpfControls.ATimerIndicator
             _isDisp = true;
             _timer.Stop();
             _timer.Tick -= _timer_Tick;
+            _control.UpdateTemplate -= _control_UpdateTemplate;
             _timer = null;
         }
     }
@@ -602,6 +621,12 @@ namespace AlfaWpfControls.ATimerIndicator
     {
         Timer,
         Percent
+    }
+
+    public enum EnumTypeViewIndicator
+    {
+        Dotted,
+        Full
     }
 
 }
