@@ -1,4 +1,5 @@
 ﻿using AlfaWpfControls.AContolTemplateUpdateEvent;
+using AlfaWpfControls.types;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -29,6 +30,8 @@ namespace AlfaWpfControls.ATimerIndicator
         private Path _pathRoot;
 
         private AControlTemplateUpdateEvent _control;
+
+        
 
 
 
@@ -304,9 +307,13 @@ namespace AlfaWpfControls.ATimerIndicator
             {
                 CurrentTimerValue = tmpVal;
 
-                var tmp = GetNewArray(CurrentTimerValue, Duration, ArrayStateSegments.Length);
+                var percent = ( ( int ) CurrentTimerValue.TotalSeconds * 100.0 ) / ( int ) Duration.TotalSeconds;
 
-                ArrayStateSegments = tmp;
+                //var tmp = GetNewArray( ArrayStateSegments.Length, percent);
+
+                //ArrayStateSegments = tmp;
+                UpdateViewIndicator(percent);
+
 
             }
             else
@@ -315,7 +322,78 @@ namespace AlfaWpfControls.ATimerIndicator
             }
         }
 
-        private ActiveSegment[] GetNewArray(TimeSpan currentValue, TimeSpan duration, int countElem)
+        private void UpdateViewIndicator(double percent)
+        {
+            switch (TypeViewIndicator)
+            {
+                case EnumTypeViewIndicator.Dotted:
+
+                    ArrayStateSegments = GetNewArray(ArrayStateSegments.Length, percent);
+
+                    break;
+                case EnumTypeViewIndicator.Full:
+
+                    RenderArc(percent);
+
+                    break;
+                default:
+                    break;
+            }
+
+
+        }
+
+        private void RenderArc(double percent)
+        {
+            int strokeThickness = 24;
+
+            if (_pathRoot == null || _control == null)
+            {
+                return;
+            }
+
+            var radius = (368-26) / 2 - strokeThickness;
+            var angle = ( percent * 360 ) / 100;
+
+            Point startPoint = new Point(radius, 0);
+            Point endPoint = ComputeCartesianCoordinate(angle, radius);
+            endPoint.X += radius;
+            endPoint.Y += radius;
+
+            _pathRoot.Width = radius * 2 + strokeThickness;
+            _pathRoot.Height = radius * 2 + strokeThickness;
+            _pathRoot.Margin = new Thickness(strokeThickness+2, strokeThickness-1, 1, -3);
+
+            bool largeArc = angle > 180.0;
+
+            Size outerArcSize = new Size(radius, radius);
+
+            _pathFigure.StartPoint = startPoint;
+
+            var flagX = startPoint.X >= endPoint.X - 0.00001 && startPoint.X <= endPoint.X + 0.00001;
+
+            var flagY = startPoint.Y >= endPoint.Y - 0.00001 && startPoint.Y <= endPoint.Y + 0.00001;
+
+
+            if (flagX && flagY)
+            {
+                endPoint.X -= 0.01;
+            }
+
+            _arcSegment.Point = endPoint;
+            _arcSegment.Size = outerArcSize;
+            _arcSegment.IsLargeArc = largeArc;
+        }
+
+        private Point ComputeCartesianCoordinate(double angle, double radius)
+        {
+            // convert to radians
+            double angleRad = ( Math.PI / 180.0 ) * ( angle - 90 );
+            double x = radius * Math.Cos(angleRad);
+            double y = radius * Math.Sin(angleRad);
+            return new Point(x, y);
+        }
+        private ActiveSegment[] GetNewArray(int countElem, double percent)
         {
             if (countElem == 0)
             {
@@ -333,7 +411,7 @@ namespace AlfaWpfControls.ATimerIndicator
 
             var valueOneElem = 100.0 / countElem;
 
-            var percent = ( ( int ) currentValue.TotalSeconds * 100.0 ) / ( int ) duration.TotalSeconds;
+
 
             var countFullElem = percent / valueOneElem;
 
@@ -621,12 +699,6 @@ namespace AlfaWpfControls.ATimerIndicator
     {
         Timer,
         Percent
-    }
-
-    public enum EnumTypeViewIndicator
-    {
-        Dotted,
-        Full
     }
 
 }

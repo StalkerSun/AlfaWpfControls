@@ -11,8 +11,6 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:ATimerIndicator}">
                     <ControlTemplate.Resources>
-                        
-
                         <ControlTemplate x:Key="ATimerIndicator_PercentValueTemplate" TargetType="{x:Type Control}">
                             <Viewbox>
                                 <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
@@ -445,7 +443,9 @@
                                           VerticalAlignment="Stretch"
                                           Margin="26,27,26,25" 
                                           Stroke="{Binding Path=ActiveBrush, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:ATimerIndicator}}}"
-                                          StrokeThickness="26">
+                                          StrokeThickness="23"
+                                          StrokeStartLineCap="Flat"
+                                          StrokeEndLineCap="Round">
                                         <Path.Data>
                                             <PathGeometry>
                                                 <PathGeometry.Figures>

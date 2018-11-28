@@ -21,6 +21,7 @@
                     <RowDefinition Height="0.2*"/>
                 </Grid.RowDefinitions>
                 <AWpfControls:ATimerIndicator x:Name="ATimerIndicatorControl" 
+                                              IndicatorInactiveColor="Red"
                                               IndicatorActiveColor="#FF0A0A74" 
                                               Duration="{Binding Duration111, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
                                               Foreground="Black"
