@@ -2,6 +2,7 @@
 using AlfaWpfControls.types;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
@@ -31,7 +32,9 @@ namespace AlfaWpfControls.ATimerIndicator
 
         private AControlTemplateUpdateEvent _control;
 
-        
+        private int _countMillisecTimer = 20;
+
+
 
 
 
@@ -42,7 +45,7 @@ namespace AlfaWpfControls.ATimerIndicator
 
         private static readonly DependencyPropertyKey ArrayStateSegmentsPropertyKey
       = DependencyProperty.RegisterReadOnly("ArrayStateSegments", typeof(ActiveSegment[]), typeof(ATimerIndicator),
-          new FrameworkPropertyMetadata(new ActiveSegment[] { new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment(), new ActiveSegment() },
+          new FrameworkPropertyMetadata(new ActiveSegment[18],
               FrameworkPropertyMetadataOptions.None));
 
         public static readonly DependencyProperty ArrayStateSegmentsProperty
@@ -168,7 +171,6 @@ namespace AlfaWpfControls.ATimerIndicator
             control.InactiveBrush = new SolidColorBrush(( Color ) e.NewValue);
         }
 
-
         #endregion
 
         #region TypeViewDataIndicator
@@ -184,7 +186,6 @@ namespace AlfaWpfControls.ATimerIndicator
 
         #endregion
 
-
         #region TypeViewIndicator
 
 
@@ -197,7 +198,12 @@ namespace AlfaWpfControls.ATimerIndicator
 
         // Using a DependencyProperty as the backing store for TypeViewIndicator.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty TypeViewIndicatorProperty =
-            DependencyProperty.Register("TypeViewIndicator", typeof(EnumTypeViewIndicator), typeof(ATimerIndicator), new PropertyMetadata(EnumTypeViewIndicator.Dotted));
+            DependencyProperty.Register("TypeViewIndicator", typeof(EnumTypeViewIndicator), typeof(ATimerIndicator), new PropertyMetadata(EnumTypeViewIndicator.Dotted, TypeViewIndicatorChanged));
+
+        private static void TypeViewIndicatorChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+
+        }
 
 
 
@@ -254,6 +260,52 @@ namespace AlfaWpfControls.ATimerIndicator
 
         #endregion
 
+        #region IndicatorStartLineCap
+
+        public PenLineCap IndicatorStartLineCap
+        {
+            get { return ( PenLineCap ) GetValue(IndicatorStartLineCapProperty); }
+            set { SetValue(IndicatorStartLineCapProperty, value); }
+        }
+
+        public static readonly DependencyProperty IndicatorStartLineCapProperty =
+            DependencyProperty.Register("IndicatorStartLineCap", typeof(PenLineCap), typeof(ATimerIndicator), new PropertyMetadata(PenLineCap.Flat));
+
+        #endregion
+
+        #region IndicatorEndLineCap
+
+        public PenLineCap IndicatorEndLineCap
+        {
+            get { return ( PenLineCap ) GetValue(IndicatorEndLineCapProperty); }
+            set { SetValue(IndicatorEndLineCapProperty, value); }
+        }
+
+        public static readonly DependencyProperty IndicatorEndLineCapProperty =
+            DependencyProperty.Register("IndicatorEndLineCap", typeof(PenLineCap), typeof(ATimerIndicator), new PropertyMetadata(PenLineCap.Round));
+
+
+
+        #endregion
+
+        #region CouterDawnCompliteEvent
+
+        public static readonly RoutedEvent CouterDawnCompliteEvent = EventManager.RegisterRoutedEvent("CouterDawnComplite",
+           RoutingStrategy.Direct, typeof(RoutedEventHandler), typeof(ATimerIndicator));
+
+        public event RoutedEventHandler CouterDawnComplite
+        {
+            add { AddHandler(CouterDawnCompliteEvent, value); }
+            remove { RemoveHandler(CouterDawnCompliteEvent, value); }
+        }
+
+        private void RaiseCouterDawnCompliteEvent()
+        {
+            RaiseEvent(new RoutedEventArgs(CouterDawnCompliteEvent));
+        }
+
+        #endregion
+
 
         #endregion
 
@@ -271,16 +323,26 @@ namespace AlfaWpfControls.ATimerIndicator
 
             _timer = new DispatcherTimer
             {
-                Interval = new TimeSpan(0, 0, 0, 1)
+                Interval = new TimeSpan(0, 0, 0, 0, _countMillisecTimer)
             };
 
             _timer.Tick += _timer_Tick;
 
+            for (int i = 0; i < ArrayStateSegments.Length; i++)
+            {
+                ArrayStateSegments[i] = new ActiveSegment();
+            }
+
             base.OnApplyTemplate();
+
+
+
 
             _control = ( AControlTemplateUpdateEvent ) ( Template.FindName("ViewIndicatorControl", this) );
 
             _control.UpdateTemplate += _control_UpdateTemplate;
+
+
         }
 
         private void _control_UpdateTemplate(object sender, RoutedEventArgs e)
@@ -294,6 +356,13 @@ namespace AlfaWpfControls.ATimerIndicator
                 _pathFigure = template.FindName("pathFigure", _control) as PathFigure;
 
                 _arcSegment = template.FindName("arcSegment", _control) as ArcSegment;
+
+                RenderArc(0);
+            }
+
+            if (DesignerProperties.GetIsInDesignMode(new DependencyObject()) == true)
+            {
+                UpdateViewIndicator(55);
             }
         }
 
@@ -301,23 +370,20 @@ namespace AlfaWpfControls.ATimerIndicator
 
         private void _timer_Tick(object sender, EventArgs e)
         {
-            var tmpVal = CurrentTimerValue - new TimeSpan(0, 0, 1);
+            var tmpVal = CurrentTimerValue - new TimeSpan(0, 0, 0, 0, _countMillisecTimer);
 
             if (tmpVal >= new TimeSpan(0, 0, 0))
             {
                 CurrentTimerValue = tmpVal;
 
-                var percent = ( ( int ) CurrentTimerValue.TotalSeconds * 100.0 ) / ( int ) Duration.TotalSeconds;
+                var percent = ( ( int ) CurrentTimerValue.TotalMilliseconds * 100.0 ) / ( int ) Duration.TotalMilliseconds;
 
-                //var tmp = GetNewArray( ArrayStateSegments.Length, percent);
-
-                //ArrayStateSegments = tmp;
                 UpdateViewIndicator(percent);
-
-
             }
             else
             {
+                RaiseCouterDawnCompliteEvent();
+
                 Stop();
             }
         }
@@ -352,7 +418,7 @@ namespace AlfaWpfControls.ATimerIndicator
                 return;
             }
 
-            var radius = (368-26) / 2 - strokeThickness;
+            var radius = ( 368 - 26 ) / 2 - strokeThickness;
             var angle = ( percent * 360 ) / 100;
 
             Point startPoint = new Point(radius, 0);
@@ -362,7 +428,7 @@ namespace AlfaWpfControls.ATimerIndicator
 
             _pathRoot.Width = radius * 2 + strokeThickness;
             _pathRoot.Height = radius * 2 + strokeThickness;
-            _pathRoot.Margin = new Thickness(strokeThickness+2, strokeThickness-1, 1, -3);
+            _pathRoot.Margin = new Thickness(strokeThickness + 2, strokeThickness - 1, 1, -3);
 
             bool largeArc = angle > 180.0;
 
@@ -383,6 +449,15 @@ namespace AlfaWpfControls.ATimerIndicator
             _arcSegment.Point = endPoint;
             _arcSegment.Size = outerArcSize;
             _arcSegment.IsLargeArc = largeArc;
+
+            if (percent == 0)
+            {
+                _pathRoot.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                _pathRoot.Visibility = Visibility.Visible;
+            }
         }
 
         private Point ComputeCartesianCoordinate(double angle, double radius)
@@ -401,8 +476,6 @@ namespace AlfaWpfControls.ATimerIndicator
             }
 
             ActiveSegment[] resArray = new ActiveSegment[countElem];
-
-            //resArray = Enumerable.Repeat(new ActiveSegment(), countElem).ToArray();
 
             for (int i = 0; i < countElem; i++)
             {
@@ -481,107 +554,6 @@ namespace AlfaWpfControls.ATimerIndicator
             _control.UpdateTemplate -= _control_UpdateTemplate;
             _timer = null;
         }
-    }
-
-    [ValueConversion(typeof(object), typeof(object))]
-    public class BoolToBrushConverter : DependencyObject, IValueConverter
-    {
-        //public Color ColorOff { get; set; }
-
-        //public Color ColorOn { get; set; }
-
-
-
-
-
-
-        public Color ColorOff
-        {
-            get { return ( Color ) GetValue(ColorOffProperty); }
-            set { SetValue(ColorOffProperty, value); }
-        }
-
-        public static readonly DependencyProperty ColorOffProperty =
-            DependencyProperty.Register("ColorOff", typeof(Color), typeof(BoolToBrushConverter));
-
-        public Color ColorOn
-        {
-            get { return ( Color ) GetValue(ColorOnProperty); }
-            set { SetValue(ColorOnProperty, value); }
-        }
-
-        public static readonly DependencyProperty ColorOnProperty =
-            DependencyProperty.Register("ColorOn", typeof(Color), typeof(BoolToBrushConverter));
-
-        private readonly Dictionary<string, Point[]> _paramGradientForSegment = new Dictionary<string, Point[]>
-        {
-            {"1", new Point[]{new Point(0.028, 0.363), new Point(0.968, 0.636)} },
-            {"2", new Point[]{new Point(0.065, 0.175), new Point(0.939, 0.819)} },
-            {"3", new Point[]{new Point(0.13, 0.104), new Point(0.863, 0.905)} },
-            {"4", new Point[]{new Point(0.226, 0.058), new Point(0.763, 0.95)} },
-            {"5", new Point[]{new Point(0.5, 0.0), new Point(0.5, 1)} },
-            {"6", new Point[]{new Point(0.726, 0.036), new Point(0.251, 0.952)} },
-            {"7", new Point[]{new Point(0.854, 0.083), new Point(0.121, 0.893)} },
-            {"8", new Point[]{new Point(0.94, 0.166), new Point(0.056, 0.822)} },
-            {"9", new Point[]{new Point(0.985, 0.35), new Point(0.013, 0.631)} },
-            {"10", new Point[]{new Point(0.992, 0.653), new Point(0.005, 0.364)} },
-            {"11", new Point[]{new Point(0.939, 0.821), new Point(0.065, 0.173)} },
-            {"12", new Point[]{new Point(0.877, 0.905), new Point(0.123, 0.082)} },
-            {"13", new Point[]{new Point(0.77, 0.962), new Point(0.254, 0.026)} },
-            {"14", new Point[]{new Point(0.5, 1), new Point(0.5, 0)} },
-            {"15", new Point[]{new Point(0.246, 0.973), new Point(0.734, 0.033)} },
-            {"16", new Point[]{new Point(0.115, 0.909), new Point(0.891, 0.092)} },
-            {"17", new Point[]{new Point(0.05, 0.803), new Point(0.944, 0.169)} },
-            {"18", new Point[]{ new Point(0.03, 0.641), new Point(0.979, 0.360)} }
-        };
-
-
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            //if (!(value is bool)) return Binding.DoNothing;
-
-            //var val = (bool)value;
-
-
-            if (!( value is ActiveSegment ))
-            {
-                return Binding.DoNothing;
-            }
-
-            var val = ( ActiveSegment ) value;
-
-            if (val.Value == 0)
-            {
-                return new SolidColorBrush(ColorOff);
-            }
-
-            if (val.Value == 1)
-            {
-                return new SolidColorBrush(ColorOn);
-            }
-
-            var numberSegment = ( string ) parameter;
-
-            var points = _paramGradientForSegment[numberSegment];
-
-            LinearGradientBrush gb = new LinearGradientBrush
-            {
-                StartPoint = points[0],
-
-                EndPoint = points[1]
-            };
-            gb.GradientStops.Add(new GradientStop(ColorOn, val.Value));
-            gb.GradientStops.Add(new GradientStop(ColorOff, val.Value));
-
-            return gb;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-
-
     }
 
     public class BoolToBrushMultiValueConverter : IMultiValueConverter
@@ -700,5 +672,108 @@ namespace AlfaWpfControls.ATimerIndicator
         Timer,
         Percent
     }
+
+    //[ValueConversion(typeof(object), typeof(object))]
+    //public class BoolToBrushConverter : DependencyObject, IValueConverter
+    //{
+    //    //public Color ColorOff { get; set; }
+
+    //    //public Color ColorOn { get; set; }
+
+
+
+
+
+
+    //    public Color ColorOff
+    //    {
+    //        get { return ( Color ) GetValue(ColorOffProperty); }
+    //        set { SetValue(ColorOffProperty, value); }
+    //    }
+
+    //    public static readonly DependencyProperty ColorOffProperty =
+    //        DependencyProperty.Register("ColorOff", typeof(Color), typeof(BoolToBrushConverter));
+
+    //    public Color ColorOn
+    //    {
+    //        get { return ( Color ) GetValue(ColorOnProperty); }
+    //        set { SetValue(ColorOnProperty, value); }
+    //    }
+
+    //    public static readonly DependencyProperty ColorOnProperty =
+    //        DependencyProperty.Register("ColorOn", typeof(Color), typeof(BoolToBrushConverter));
+
+    //    private readonly Dictionary<string, Point[]> _paramGradientForSegment = new Dictionary<string, Point[]>
+    //    {
+    //        {"1", new Point[]{new Point(0.028, 0.363), new Point(0.968, 0.636)} },
+    //        {"2", new Point[]{new Point(0.065, 0.175), new Point(0.939, 0.819)} },
+    //        {"3", new Point[]{new Point(0.13, 0.104), new Point(0.863, 0.905)} },
+    //        {"4", new Point[]{new Point(0.226, 0.058), new Point(0.763, 0.95)} },
+    //        {"5", new Point[]{new Point(0.5, 0.0), new Point(0.5, 1)} },
+    //        {"6", new Point[]{new Point(0.726, 0.036), new Point(0.251, 0.952)} },
+    //        {"7", new Point[]{new Point(0.854, 0.083), new Point(0.121, 0.893)} },
+    //        {"8", new Point[]{new Point(0.94, 0.166), new Point(0.056, 0.822)} },
+    //        {"9", new Point[]{new Point(0.985, 0.35), new Point(0.013, 0.631)} },
+    //        {"10", new Point[]{new Point(0.992, 0.653), new Point(0.005, 0.364)} },
+    //        {"11", new Point[]{new Point(0.939, 0.821), new Point(0.065, 0.173)} },
+    //        {"12", new Point[]{new Point(0.877, 0.905), new Point(0.123, 0.082)} },
+    //        {"13", new Point[]{new Point(0.77, 0.962), new Point(0.254, 0.026)} },
+    //        {"14", new Point[]{new Point(0.5, 1), new Point(0.5, 0)} },
+    //        {"15", new Point[]{new Point(0.246, 0.973), new Point(0.734, 0.033)} },
+    //        {"16", new Point[]{new Point(0.115, 0.909), new Point(0.891, 0.092)} },
+    //        {"17", new Point[]{new Point(0.05, 0.803), new Point(0.944, 0.169)} },
+    //        {"18", new Point[]{ new Point(0.03, 0.641), new Point(0.979, 0.360)} }
+    //    };
+
+
+    //    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    //    {
+    //        //if (!(value is bool)) return Binding.DoNothing;
+
+    //        //var val = (bool)value;
+
+
+    //        if (!( value is ActiveSegment ))
+    //        {
+    //            return Binding.DoNothing;
+    //        }
+
+    //        var val = ( ActiveSegment ) value;
+
+    //        if (val.Value == 0)
+    //        {
+    //            return new SolidColorBrush(ColorOff);
+    //        }
+
+    //        if (val.Value == 1)
+    //        {
+    //            return new SolidColorBrush(ColorOn);
+    //        }
+
+    //        var numberSegment = ( string ) parameter;
+
+    //        var points = _paramGradientForSegment[numberSegment];
+
+    //        LinearGradientBrush gb = new LinearGradientBrush
+    //        {
+    //            StartPoint = points[0],
+
+    //            EndPoint = points[1]
+    //        };
+    //        gb.GradientStops.Add(new GradientStop(ColorOn, val.Value));
+    //        gb.GradientStops.Add(new GradientStop(ColorOff, val.Value));
+
+    //        return gb;
+    //    }
+
+    //    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+
+
+    //}
+
+
 
 }

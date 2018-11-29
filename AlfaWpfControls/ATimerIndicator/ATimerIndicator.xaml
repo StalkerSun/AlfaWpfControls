@@ -3,7 +3,8 @@
                     xmlns:local="clr-namespace:AlfaWpfControls.ATimerIndicator"
                     xmlns:conv="clr-namespace:AlfaWpfControls.Convertors"
                     xmlns:helpers="clr-namespace:AlfaWpfControls.Helpers"
-                    xmlns:ACntrlT ="clr-namespace:AlfaWpfControls.AContolTemplateUpdateEvent">
+                    xmlns:ACntrlT ="clr-namespace:AlfaWpfControls.AContolTemplateUpdateEvent"
+                    >
     
 
     <Style TargetType="{x:Type local:ATimerIndicator}">
@@ -444,8 +445,8 @@
                                           Margin="26,27,26,25" 
                                           Stroke="{Binding Path=ActiveBrush, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:ATimerIndicator}}}"
                                           StrokeThickness="23"
-                                          StrokeStartLineCap="Flat"
-                                          StrokeEndLineCap="Round">
+                                          StrokeStartLineCap="{Binding Path=IndicatorStartLineCap, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:ATimerIndicator}}}"
+                                          StrokeEndLineCap="{Binding Path=IndicatorEndLineCap, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:ATimerIndicator}}}">
                                         <Path.Data>
                                             <PathGeometry>
                                                 <PathGeometry.Figures>
@@ -490,7 +491,15 @@
                                     </LinearGradientBrush>
                                 </Ellipse.Fill>
                             </Ellipse>
-                            <Ellipse Stretch="Fill" StrokeLineJoin="Round" Stroke="#FF000000" Fill="#FF34516E" Margin="56,57,0,0" Height="257" VerticalAlignment="Top" HorizontalAlignment="Left" Width="257"/>
+                            <Ellipse Stretch="Fill" 
+                                     StrokeLineJoin="Round" 
+                                     Stroke="#FF000000" 
+                                     Fill="{TemplateBinding Background}" 
+                                     Margin="56,57,0,0" 
+                                     Height="257" 
+                                     VerticalAlignment="Top" 
+                                     HorizontalAlignment="Left" 
+                                     Width="257"/>
 
                             <ACntrlT:AControlTemplateUpdateEvent x:Name="ViewIndicatorControl" 
                                                                  HorizontalAlignment="Stretch" 

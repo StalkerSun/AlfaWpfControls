@@ -11,50 +11,19 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Window.Resources>
-        <vm:VmATimerIndicator x:Key="VmATimerIndicator"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Templates/ATimerIndicatorTemplates.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+
     </Window.Resources>
     <Grid>
         <UniformGrid>
-            <Grid x:Name="ATimerIndicatorGrid" DataContext="{StaticResource VmATimerIndicator}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="0.8*"/>
-                    <RowDefinition Height="0.2*"/>
-                </Grid.RowDefinitions>
-                <AWpfControls:ATimerIndicator x:Name="ATimerIndicatorControl" 
-                                              IndicatorInactiveColor="Red"
-                                              IndicatorActiveColor="#FF0A0A74" 
-                                              Duration="{Binding Duration111, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
-                                              Foreground="Black"
-                                              TypeViewIndicator="Full"
-                                              >
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="OnStart" SourceObject="{Binding Mode=OneWay}">
-                            <ei:CallMethodAction MethodName="RunTimer" TargetObject="{Binding ElementName=ATimerIndicatorControl}"/>
-                        </i:EventTrigger>
-                        <i:EventTrigger EventName="OnStop" SourceObject="{Binding Mode=OneWay}">
-                            <ei:CallMethodAction MethodName="Stop" TargetObject="{Binding ElementName=ATimerIndicatorControl}"/>
-                        </i:EventTrigger>
-                        <i:EventTrigger EventName="OnRestart" SourceObject="{Binding Mode=OneWay}">
-                            <ei:CallMethodAction MethodName="Reset" TargetObject="{Binding ElementName=ATimerIndicatorControl}"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </AWpfControls:ATimerIndicator>
-                <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <TextBox Width="30" Text="{Binding StrDuration, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="PreviewTextInput">
-                                <ei:CallMethodAction TargetObject="{Binding}" MethodName="NumberValidationTextBox"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </TextBox>
-                    <Button Content="Start" Command="{Binding StartCommand}"/>
-                    <Button Content="Stop" Command="{Binding StopCommand}"/>
-                    <Button Content="Restart" Command="{Binding ReStartCommand}"/>
-                </StackPanel>
-
-            </Grid>
-            
-
+            <Control x:Name="ATimerIndicDemo"
+                     Template="{DynamicResource ATimerIndicatorDemoTemplate}"
+                     HorizontalAlignment="Stretch"
+                     VerticalAlignment="Stretch"/>
 
         </UniformGrid>
 
