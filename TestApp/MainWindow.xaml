@@ -12,6 +12,8 @@
             <vm:VmATimerIndicator x:Key="VmATimerIndicator"/>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Templates/ATimerIndicatorTemplates.xaml"/>
+                <ResourceDictionary Source="Templates/AComputerIconDemoTemplate.xaml"/>
+                <ResourceDictionary Source="Templates/APingIconDemoTemplate.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -22,6 +24,11 @@
                      Template="{DynamicResource ATimerIndicatorDemoTemplate}"
                      HorizontalAlignment="Stretch"
                      VerticalAlignment="Stretch"/>
+            <Control x:Name="AComputerIcon"
+                     Template="{DynamicResource AComputerIconDemoTemplate}"/>
+            <Control x:Name="APingIcon"
+                     Template="{DynamicResource APingIconDemoTemplate}"/>
+
 
         </UniformGrid>
 

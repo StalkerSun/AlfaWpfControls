@@ -1,0 +1,28 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:AlfaWpfControls.IconsTemplate.AComputerIcon">
+    <Style TargetType="{x:Type local:AComputerIcon}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:AComputerIcon}">
+                    <Viewbox>
+                        <Grid>
+                            <Path x:Name="MainPath" 
+                              Data="M10,11.361 C9.8067007,11.361 9.6499996,11.5177 9.6499996,11.711 9.6499996,11.9043 9.8067007,12.061 10,12.061 10.193299,12.061 10.35,11.9043 10.35,11.711 10.35,11.5177 10.193299,11.361 10,11.361 z M0.99999994,0.99999964 L0.99999994,11 19,11 19,0.99999964 z M1.25,1.1902804E-13 L18.75,1.1902804E-13 C19.440355,-2.9802306E-07 20,0.55964375 20,1.25 L20,10.75 C20,11.440356 19.440355,12 18.75,12 L11.5,12 11.5,13.289125 14.126,13.289125 C14.332555,13.289125 14.5,13.45657 14.5,13.663125 L14.5,13.957125 C14.5,14.16368 14.332555,14.331125 14.126,14.331125 L5.8740001,14.331125 C5.6674457,14.331125 5.5,14.16368 5.5,13.957125 L5.5,13.663125 C5.5,13.45657 5.6674457,13.289125 5.8740001,13.289125 L8.5,13.289125 8.5,12 1.25,12 C0.55964404,12 0,11.440356 0,10.75 L0,1.25 C0,0.55964375 0.55964404,-2.9802306E-07 1.25,1.1902804E-13 z" 
+                              Fill="{TemplateBinding MainColor}" 
+                              HorizontalAlignment="Center" 
+                              VerticalAlignment="Center"/>
+                            <Rectangle x:Name="ScreenPath" 
+                                       Margin="1,1,1,3.33" 
+                                       Fill="{TemplateBinding ScreenColor}"/>
+                        </Grid>
+                    </Viewbox>
+
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+
+    </Style>
+
+</ResourceDictionary>

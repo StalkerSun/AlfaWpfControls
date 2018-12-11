@@ -4,6 +4,8 @@
     xmlns:local="clr-namespace:AlfaWpfControls">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/AlfaWpfControls;component/ATimerIndicator/ATimerIndicator.xaml"/>
+        <ResourceDictionary Source="/AlfaWpfControls;component/IconsTemplate/AComputerIcon/AComputerIcon.xaml"/>
+        <ResourceDictionary Source="/AlfaWpfControls;component/IconsTemplate/APingIcon/APingIcon.xaml"/>
     </ResourceDictionary.MergedDictionaries>
     
    
