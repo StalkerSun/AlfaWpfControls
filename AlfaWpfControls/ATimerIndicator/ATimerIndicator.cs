@@ -20,10 +20,6 @@ namespace AlfaWpfControls.ATimerIndicator
 
         private DispatcherTimer _timer;
 
-        private int _currentIndex = 0;
-
-        private bool _isDisp = false;
-
         private PathFigure _pathFigure;
 
         private ArcSegment _arcSegment;
@@ -548,7 +544,6 @@ namespace AlfaWpfControls.ATimerIndicator
 
         ~ATimerIndicator()
         {
-            _isDisp = true;
             _timer.Stop();
             _timer.Tick -= _timer_Tick;
             _control.UpdateTemplate -= _control_UpdateTemplate;
