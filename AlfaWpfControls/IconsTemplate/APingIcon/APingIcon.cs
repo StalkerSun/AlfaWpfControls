@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -14,8 +15,24 @@ namespace AlfaWpfControls.IconsTemplate.APingIcon
             set { SetValue(ActiveComputerBrushProperty, value); }
         }
         public static readonly DependencyProperty ActiveComputerBrushProperty =
-            DependencyProperty.Register("ActiveComputerBrush", typeof(Brush), typeof(APingIcon), new PropertyMetadata(Brushes.Green));
+            DependencyProperty.Register("ActiveComputerBrush", typeof(Brush), typeof(APingIcon), new PropertyMetadata(Brushes.Blue, ActiveComputerBrushChanged));
 
+        private static void ActiveComputerBrushChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var obj = ( APingIcon ) d;
+
+            obj.ActiveComputerColor = (Color)( ( Brush ) e.NewValue ).GetValue(SolidColorBrush.ColorProperty);
+        }
+
+        public Color ActiveComputerColor
+        {
+            get { return ( Color ) GetValue(ActiveComputerColorProperty); }
+            set { SetValue(ActiveComputerColorProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ActiveComputerColor.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ActiveComputerColorProperty =
+            DependencyProperty.Register("ActiveComputerColor", typeof(Color), typeof(APingIcon), new PropertyMetadata(Colors.Blue));
 
 
         public Brush PassiveComputerBrush
@@ -59,17 +76,44 @@ namespace AlfaWpfControls.IconsTemplate.APingIcon
 
         // Using a DependencyProperty as the backing store for IsPlayAnimationPing.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty IsPlayAnimationPingProperty =
-            DependencyProperty.Register("IsPlayAnimationPing", typeof(bool), typeof(APingIcon), new PropertyMetadata(false));
+            DependencyProperty.Register("IsPlayAnimationPing", typeof(bool), typeof(APingIcon), new PropertyMetadata(false, IsPlayAnimationChangeCallback));
 
+        private static void IsPlayAnimationChangeCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
 
-
-
-
-
+        }
 
         static APingIcon()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(APingIcon), new FrameworkPropertyMetadata(typeof(APingIcon)));
+        }
+
+        public override void OnApplyTemplate()
+        {
+            //Template.Resources["ActiveColorPingRound"] = ActiveComputerColor;
+
+
+            //var obj = ( Color ) this.Template.Resources["ActiveColorPingRound"];
+
+            //obj = ActiveComputerColor;
+
+            //var obj1 = ((Color)FindResource("ActiveColorPingRound"));
+            base.OnApplyTemplate();
+
+            ( Template.Resources["ActiveColorComp"] as SolidColorBrush ).Color = Colors.Yellow;
+            Template.Resources["ActiveColorPingRound"] = ActiveComputerColor;
+
+            //var a = Template.Resources["ActiveColorComp"] as SolidColorBrush;
+
+            
+
+            
+            
+            //var obj = (Color)this.Template.Resources["ActiveColorPingRound"];
+            //(this.Template.Resources["ActiveColorPingRound"] as Color).A= ActiveComputerColor.A;
+
+            
+
         }
 
 
